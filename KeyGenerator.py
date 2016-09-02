@@ -81,8 +81,9 @@ def key_generator(input_string):
     key[key_rows_cordenates, key_cols_cordenates] = 1
     return key
 
-#input_string = "IntroductionToCryptographyIntroductionToCryptography"
-input_string = "Cryptography"
+input_string = "IntroductionToCryp"
+print len(input_string)
+# input_string = "Cryptography"
 
 for _ in xrange(5):
     matrix= key_generator(input_string.upper())
