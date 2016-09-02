@@ -88,7 +88,6 @@ print len(input_string)
 for _ in xrange(5):
     matrix= key_generator(input_string.upper())
     print matrix
-    print
 
 
 
