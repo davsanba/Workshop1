@@ -27,7 +27,6 @@ class KeyGenerator:
         if self.key == None:
             key_proto = self.keyGen()
 
-
 def refill_input(input_string):
     list_input = list(input_string.upper())
     total_refill = check_size(input_string)**2 - len(list_input)
@@ -89,10 +88,7 @@ def key_generator(input_string):
     key[key_rows_cordenates, key_cols_cordenates] = 1
     return key
 
-input_string = "IntroductionToCryptography"
-# input_string = "Cryptography"
-
-def fill_matrix(input_string):
+def fill_matrix(input_string, rotation):
     # Key
     key = key_generator(input_string)
     # String refilled
@@ -108,15 +104,34 @@ def fill_matrix(input_string):
     key_ascii = np.copy(key)
     cordenates = np.nonzero(key == 1)
     key_ascii[cordenates] = total_parts[0]
-    for part in range(1,len(total_parts)):
-        key = np.rot90(key)
-        key_ascii += key
-        cordenates = np.nonzero(key_ascii == 1)
-        key_ascii[cordenates] = total_parts[part]
+
+    if rotation == "anticlockwise":
+        for part in range(1,len(total_parts)):
+            key = np.rot90(key)
+            key_ascii += key
+            cordenates = np.nonzero(key_ascii == 1)
+            key_ascii[cordenates] = total_parts[part]
+    elif rotation == "clockwise":
+        for part in range(1,len(total_parts)):
+            key = np.rot90(key,3)
+            key_ascii += key
+            cordenates = np.nonzero(key_ascii == 1)
+            key_ascii[cordenates] = total_parts[part]
+    else:
+        "Wrong Rotation Input"
 
     return key_ascii
 
-print "Final Matrix"
-print fill_matrix(input_string)
+# input_string = "IntroductionToCryptography"
+
+input_string = "Cryptography"
+
+rotation1 = "anticlockwise"
+rotation2 = "clockwise"
+
+print "anticlockwise"
+print fill_matrix(input_string, rotation1)
+print "clockwise"
+print fill_matrix(input_string, rotation2)
 
 
