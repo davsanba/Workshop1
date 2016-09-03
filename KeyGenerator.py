@@ -28,16 +28,24 @@ class KeyGenerator:
             key_proto = self.keyGen()
 
 
-def fill_input_string(input_string):
-    list_input = list(input_string)
-    total_refill = int(ceil(sqrt(len(input_string))))**2 - len(list_input)
+def refill_input(input_string):
+    list_input = list(input_string.upper())
+    total_refill = check_size(input_string)**2 - len(list_input)
     return list_input + list(repeat("X", total_refill))
 
+def check_size(input_string):
+    len_key = int(ceil(sqrt(len(input_string))))
+    if int(len_key) % 2 == 1:
+        len_key += 1
+    return len_key
+
 def key_generator(input_string):
-    len_key = sqrt(len(fill_input_string(input_string)))
+    # Length Key
+    length_key = check_size(input_string)
+
     # Create a nxn grid where 'n' is even. In the following example n=6.
     # Divide this grid up into 4 sections of size n/2.
-    grid_part = int(len_key/2)
+    grid_part = int(length_key/2)
 
     # Number each section
     numbers_cordenates = [np.arange(1, grid_part**2 + 1)]
@@ -77,17 +85,38 @@ def key_generator(input_string):
         key_cols_cordenates.append(cordenates[rn_cord][my_random_cordinate][1])
 
     # Finally the key
-    key = np.zeros((int(len_key),int(len_key)))
+    key = np.zeros((int(length_key),int(length_key)))
     key[key_rows_cordenates, key_cols_cordenates] = 1
     return key
 
-input_string = "IntroductionToCryp"
-print len(input_string)
+input_string = "IntroductionToCryptography"
 # input_string = "Cryptography"
 
-for _ in xrange(5):
-    matrix= key_generator(input_string.upper())
-    print matrix
+def fill_matrix(input_string):
+    # Key
+    key = key_generator(input_string)
+    # String refilled
+    string_to_cipher = refill_input(input_string)
+    list_asci = [ord(s) for s in string_to_cipher]
 
+    # Divide a list into n equal parts
+    # Taken from: http://stackoverflow.com/questions/4119070/how-to-divide-a-list-into-n-equal-parts-python
+    div_list = lambda lst, sz: [lst[i:i + sz] for i in range(0, len(lst), sz)]
+    total_parts = div_list(list_asci,len(list_asci)/4)
+
+    # Key strings
+    key_ascii = np.copy(key)
+    cordenates = np.nonzero(key == 1)
+    key_ascii[cordenates] = total_parts[0]
+    for part in range(1,len(total_parts)):
+        key = np.rot90(key)
+        key_ascii += key
+        cordenates = np.nonzero(key_ascii == 1)
+        key_ascii[cordenates] = total_parts[part]
+
+    return key_ascii
+
+print "Final Matrix"
+print fill_matrix(input_string)
 
 
