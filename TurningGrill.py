@@ -13,7 +13,8 @@ from Interface import *
 class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
 
     def __init__(self):
-        self.rotation = "clockwise"
+        self.rotation = ""
+        self.original_length = 0
         super(self.__class__, self).__init__()
         self.ui = Ui_TurningGrill()
         self.ui.setupUi(self)
@@ -26,8 +27,8 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
     def check_encrypt(self):
         plain_text = self.ui.PlainText.toPlainText()
         if plain_text != "":
-            matrix, key, len = self.encrypt_string(str(plain_text),self.rotation)
-            self.ui.KeyShow.setPlainText(str(key))
+            matrix, key = self.encrypt_string(str(plain_text),self.rotation)
+            self.ui.KeyShow.setPlainText(str(key).strip())
             self.ui.TableSize.setValue(self.check_size(plain_text))
             self.print_matrix(matrix)
 
@@ -37,7 +38,6 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         self.ui.Matrix.resizeRowsToContents()
         self.ui.Matrix.setColumnCount(size[1])
         self.ui.Matrix.resizeColumnsToContents()
-        print matrix
         for i in range(0,size[0]):
             for j in range (0, size[1]):
                 self.ui.Matrix.setItem(i,j, QTableWidgetItem(matrix[i][j]))
@@ -47,7 +47,6 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
             if rotation == 1: table = self.ui.Rotation2
             elif rotation == 2: table = self.ui.Rotation3
             else: table = self.ui.Rotation1
-
             size = matrix.shape
             table.setStyleSheet('font-size: 5pt')
 
@@ -75,9 +74,13 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
             len_key += 1
         return len_key
 
+    def set_original_len(self, length):
+        self.original_length = length
+
     def encrypt_string(self,input_string,rotation):
         #fill string
-        original_len = len(input_string)
+        self.set_original_len(len(input_string))
+
         string_to_cipher = self.refill_input(input_string)
         string_len = self.check_size(string_to_cipher)
 
@@ -92,6 +95,7 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         total_parts = div_list(string_to_cipher, len(string_to_cipher) / 4)
 
         cipher_matrix = np.chararray([string_len,string_len])
+        print cipher_matrix
 
         # Key strings
         cipher_matrix[key.coordinates()] = total_parts[0]
@@ -111,7 +115,7 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         else:
             "Wrong Rotation Input"
 
-        return cipher_matrix, key, original_len
+        return cipher_matrix, key
 
     def check_decrypt(self):
         key_text = self.ui.KeyShow.toPlainText()
@@ -119,11 +123,10 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         key = ast.literal_eval(key_text)
         size = self.ui.Matrix.columnCount()
         new_matrix = np.chararray([size, size])
-        new_matrix = np.rot90(new_matrix) if self.rotation == "clockwise" else np.rot90(new_matrix,3)
-        decrypted_text = self.decrypt_string(new_matrix,key,size**2,self.rotation)
+        print new_matrix
+        new_matrix = np.rot90(new_matrix) if self.rotation == "anticlockwise" else np.rot90(new_matrix,3)
+        decrypted_text = self.decrypt_string(new_matrix, key, self.original_length, self.rotation)
         self.ui.textBrowser.setText(decrypted_text)
-
-
 
 
     def decrypt_string(self,cipher_matrix, key, original_len, rotation):
@@ -133,23 +136,21 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         if rotation == "anticlockwise":
             for part in range(0, 4):
                 text = cipher_matrix[zip(*key)]
-                cipher_matrix = np.rot90(cipher_matrix, 3)
+                cipher_matrix = np.rot90(cipher_matrix)
                 text =  [' ' if (x == '') else x for x in text]
                 original_string.insert(0,''.join(text))
         elif rotation == "clockwise":
             for part in range(0, 4):
                 text = cipher_matrix[zip(*key)]
-                cipher_matrix = np.rot90(cipher_matrix)
+                cipher_matrix = np.rot90(cipher_matrix,3)
                 text = [' ' if (x == '') else x for x in text]
                 original_string.insert(0,''.join(text))
         else:
             "Wrong Rotation Input"
 
         original_string = ''.join(original_string)
+
         return original_string[0:original_len]
-
-
-
 
 
 if __name__ == '__main__':              # if we're running file directly and not importing it
@@ -157,20 +158,17 @@ if __name__ == '__main__':              # if we're running file directly and not
     form = TurningGrill()  # We set the form to be our ExampleApp (design)
     form.show()  # Show the form
     app.exec_()  # and execute the app
-"""""
-programa = TurningGrill()
+
+programm= TurningGrill()
+
+"""
 
 string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 rotation1 = "anticlockwise"
 rotation2 = "clockwise"
 
-
-matriz,key, len= programa.encrypt_string(string,rotation1)
-
-print matriz
-
-stringde = programa.decrypt_string(matriz, key, len, rotation1)
-print stringde
-
+matriz, key, length_original= programm.encrypt_string(string,rotation1)
+print length_original
+stringde = programm.decrypt_string(matriz, key, length_original, rotation1)
 
 """
