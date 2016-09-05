@@ -1,3 +1,4 @@
+import ast
 import sys
 from math import ceil, sqrt
 from itertools import repeat
@@ -17,8 +18,10 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         self.ui = Ui_TurningGrill()
         self.ui.setupUi(self)
         self.ui.EncryptButton.clicked.connect(self.check_encrypt)
+        self.ui.DecryptButton.clicked.connect(self.check_decrypt)
         self.ui.clockwiseButton.clicked.connect(lambda : self.set_rotation("clockwise"))
         self.ui.AnticlockwiseButton.clicked.connect(lambda : self.set_rotation("anticlockwise"))
+
 
     def check_encrypt(self):
         plain_text = self.ui.PlainText.toPlainText()
@@ -34,6 +37,7 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         self.ui.Matrix.resizeRowsToContents()
         self.ui.Matrix.setColumnCount(size[1])
         self.ui.Matrix.resizeColumnsToContents()
+        print matrix
         for i in range(0,size[0]):
             for j in range (0, size[1]):
                 self.ui.Matrix.setItem(i,j, QTableWidgetItem(matrix[i][j]))
@@ -109,21 +113,34 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
 
         return cipher_matrix, key, original_len
 
+    def check_decrypt(self):
+        key_text = self.ui.KeyShow.toPlainText()
+        key_text = unicode(key_text, "utf-8")
+        key = ast.literal_eval(key_text)
+        size = self.ui.Matrix.columnCount()
+        new_matrix = np.chararray([size, size])
+        new_matrix = np.rot90(new_matrix) if self.rotation == "clockwise" else np.rot90(new_matrix,3)
+        decrypted_text = self.decrypt_string(new_matrix,key,size**2,self.rotation)
+        self.ui.textBrowser.setText(decrypted_text)
+
+
+
+
     def decrypt_string(self,cipher_matrix, key, original_len, rotation):
 
         original_string = []
 
         if rotation == "anticlockwise":
             for part in range(0, 4):
-                text = cipher_matrix[key.coordinates()]
+                text = cipher_matrix[zip(*key)]
                 cipher_matrix = np.rot90(cipher_matrix, 3)
-                text = ls = [' ' if (x == '') else x for x in text]
+                text =  [' ' if (x == '') else x for x in text]
                 original_string.insert(0,''.join(text))
         elif rotation == "clockwise":
             for part in range(0, 4):
-                text = cipher_matrix[key.coordinates()]
+                text = cipher_matrix[zip(*key)]
                 cipher_matrix = np.rot90(cipher_matrix)
-                text = ls = [' ' if (x == '') else x for x in text]
+                text = [' ' if (x == '') else x for x in text]
                 original_string.insert(0,''.join(text))
         else:
             "Wrong Rotation Input"
