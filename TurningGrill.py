@@ -50,7 +50,7 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
             elif rotation == 2: table = self.ui.Rotation3
             else: table = self.ui.Rotation1
             size = matrix.shape
-            table.setStyleSheet('font-size: 5pt')
+            table.setStyleSheet('font-size: 6pt')
             table.setRowCount(size[0])
             table.resizeRowsToContents()
             table.setColumnCount(size[1])

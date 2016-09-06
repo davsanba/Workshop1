@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
-    <height>661</height>
+    <width>513</width>
+    <height>635</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,31 +39,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>90</y>
-      <width>351</width>
-      <height>301</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Matrix:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="Matrix"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>570</y>
-      <width>327</width>
+      <x>10</x>
+      <y>550</y>
+      <width>311</width>
       <height>41</height>
      </rect>
     </property>
@@ -87,38 +65,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>90</y>
-      <width>121</width>
-      <height>301</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Rotations:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="Rotation1"/>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="Rotation2"/>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="Rotation3"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
       <x>20</x>
-      <y>490</y>
-      <width>461</width>
-      <height>71</height>
+      <y>460</y>
+      <width>301</width>
+      <height>81</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -152,13 +102,79 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>91</y>
+      <width>34</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Matrix:</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="Matrix">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>110</y>
+      <width>301</width>
+      <height>241</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>90</y>
+      <width>50</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Rotations:</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="Rotation1">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>110</y>
+      <width>150</width>
+      <height>150</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="Rotation2">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>270</y>
+      <width>150</width>
+      <height>150</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="Rotation3">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>430</y>
+      <width>150</width>
+      <height>150</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>400</y>
-      <width>471</width>
-      <height>71</height>
+      <y>360</y>
+      <width>301</width>
+      <height>92</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -169,22 +185,22 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1" rowspan="2">
+     <item row="1" column="0">
+      <widget class="QPlainTextEdit" name="KeyShow"/>
+     </item>
+     <item row="1" column="1">
       <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Table Rows</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QSpinBox" name="TableSize"/>
        </item>
       </layout>
      </item>
-     <item row="1" column="0">
-      <widget class="QPlainTextEdit" name="KeyShow"/>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Table Rows</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -194,7 +210,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>520</width>
+     <width>513</width>
      <height>21</height>
     </rect>
    </property>
