@@ -6,7 +6,6 @@ import numpy as np
 from PyQt4.QtGui import QTableWidgetItem
 
 from KeyGenerator import KeyGenerator as keyg
-from PyQt4 import QtCore, QtGui, uic
 from Interface import *
 
 
@@ -57,7 +56,8 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
 
             for i in range(0,size[0]):
                 for j in range (0, size[1]):
-                    table.setItem(i,j, QTableWidgetItem(matrix[i][j]))
+                    if matrix[i][j].isalnum() or matrix[i][j] == "" :
+                        table.setItem(i,j, QTableWidgetItem(matrix[i][j]))
 
 
     def set_rotation(self, rotation):
@@ -95,7 +95,6 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         total_parts = div_list(string_to_cipher, len(string_to_cipher) / 4)
 
         cipher_matrix = np.chararray([string_len,string_len])
-        print cipher_matrix
 
         # Key strings
         cipher_matrix[key.coordinates()] = total_parts[0]
@@ -122,14 +121,20 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         key_text = unicode(key_text, "utf-8")
         key = ast.literal_eval(key_text)
         size = self.ui.Matrix.columnCount()
-        new_matrix = np.chararray([size, size])
-        print new_matrix
-        new_matrix = np.rot90(new_matrix) if self.rotation == "anticlockwise" else np.rot90(new_matrix,3)
+
+        new_matrix = []
+        for row in range(size):
+            rows = []
+            for col in range(size):
+                rows.append(str(self.ui.Matrix.item(row,col).text()))
+            new_matrix.append(rows)
+
+        new_matrix = np.array(new_matrix)
         decrypted_text = self.decrypt_string(new_matrix, key, self.original_length, self.rotation)
         self.ui.textBrowser.setText(decrypted_text)
 
 
-    def decrypt_string(self,cipher_matrix, key, original_len, rotation):
+    def decrypt_string(self, cipher_matrix, key, original_len, rotation):
 
         original_string = []
 
@@ -159,10 +164,8 @@ if __name__ == '__main__':              # if we're running file directly and not
     form.show()  # Show the form
     app.exec_()  # and execute the app
 
-programm= TurningGrill()
 
 """
-
 string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
 rotation1 = "anticlockwise"
 rotation2 = "clockwise"
@@ -172,3 +175,4 @@ print length_original
 stringde = programm.decrypt_string(matriz, key, length_original, rotation1)
 
 """
+

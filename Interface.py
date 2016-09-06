@@ -141,7 +141,7 @@ class Ui_TurningGrill(object):
     def retranslateUi(self, TurningGrill):
         TurningGrill.setWindowTitle(_translate("TurningGrill", "Turning Grill", None))
         self.label_4.setText(_translate("TurningGrill", "Plain Text:", None))
-        self.label_2.setText(_translate("TurningGrill", "Matrix:", None))
+        self.label_2.setText(_translate("TurningGrill", "Encrypted Matrix:", None))
         self.EncryptButton.setText(_translate("TurningGrill", "Encrypt", None))
         self.DecryptButton.setText(_translate("TurningGrill", "Decrypt", None))
         self.label_3.setText(_translate("TurningGrill", "Rotations:", None))
