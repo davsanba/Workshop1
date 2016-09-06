@@ -1,21 +1,21 @@
-import random
-import sys
-from math import ceil, sqrt
-from itertools import repeat
 import numpy as np
 import random
-from MatrixRotator import Matrix
 
-
+# Class to generate the random key
 class KeyGenerator:
+    # Initialization
     def __init__(self, len_key):
         self.key = []
         self.len = len_key
         self.key_generator
 
+    # Key length
     def __len__(self):
         return len(self.key)
 
+    ##############################
+    # Key random generator
+    ##############################
     @property
     def key_generator(self):
         # Length Key
@@ -64,18 +64,21 @@ class KeyGenerator:
         self.key = zip(key_rows_cordenates, key_cols_cordenates)
         self.key.sort()
 
+    # To string method
     def __str__(self):
         return self.key.__str__()
 
+    # x,y positions for the key
     def x(self, position):
         return self.key[position][0]
-
     def y(self, position):
         return self.key[position][1]
 
+    # coordinates (x,y)
     def coordinates(self):
         return zip(*self.key)
 
+    # KEY
     def key(self):
         return self.key
 

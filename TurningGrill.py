@@ -11,10 +11,13 @@ from Interface import *
 
 class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
 
+    # Turning Grill initialization
     def __init__(self):
         self.rotation = ""
         self.original_length = 0
         super(self.__class__, self).__init__()
+
+        # Initialization Graphic interface
         self.ui = Ui_TurningGrill()
         self.ui.setupUi(self)
         self.ui.EncryptButton.clicked.connect(self.check_encrypt)
@@ -22,15 +25,14 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
         self.ui.clockwiseButton.clicked.connect(lambda : self.set_rotation("clockwise"))
         self.ui.AnticlockwiseButton.clicked.connect(lambda : self.set_rotation("anticlockwise"))
 
+    # Rotation and length initialization
+    def set_rotation(self, rotation):
+        self.rotation = rotation
 
-    def check_encrypt(self):
-        plain_text = self.ui.PlainText.toPlainText()
-        if plain_text != "":
-            matrix, key = self.encrypt_string(str(plain_text),self.rotation)
-            self.ui.KeyShow.setPlainText(str(key).strip())
-            self.ui.TableSize.setValue(self.check_size(plain_text))
-            self.print_matrix(matrix)
+    def set_original_len(self, length):
+        self.original_length = length
 
+    # Print encryption matrix
     def print_matrix(self, matrix):
         size = matrix.shape
         self.ui.Matrix.setRowCount(size[0])
@@ -41,6 +43,7 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
             for j in range (0, size[1]):
                 self.ui.Matrix.setItem(i,j, QTableWidgetItem(matrix[i][j]))
 
+    # Print the rotation 90, 180, 270 grades
     def print_rotation_matrix(self, matrix, rotation):
         if rotation != 3:
             if rotation == 1: table = self.ui.Rotation2
@@ -48,7 +51,6 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
             else: table = self.ui.Rotation1
             size = matrix.shape
             table.setStyleSheet('font-size: 5pt')
-
             table.setRowCount(size[0])
             table.resizeRowsToContents()
             table.setColumnCount(size[1])
@@ -59,23 +61,29 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
                     if matrix[i][j].isalnum() or matrix[i][j] == "" :
                         table.setItem(i,j, QTableWidgetItem(matrix[i][j]))
 
-
-    def set_rotation(self, rotation):
-        self.rotation = rotation
-
+    # Refill the input with x missing
     def refill_input(slef, input_string):
         list_input = list(input_string.upper())
         total_refill = slef.check_size(input_string) ** 2 - len(list_input)
         return list_input + list(repeat("X", total_refill))
 
+    # Check the size, and give a key with even length
     def check_size(self, input_string):
         len_key = int(ceil(sqrt(len(input_string))))
         if int(len_key) % 2 == 1:
             len_key += 1
         return len_key
 
-    def set_original_len(self, length):
-        self.original_length = length
+    ###############
+    # Encryption
+    ###############
+    def check_encrypt(self):
+        plain_text = self.ui.PlainText.toPlainText()
+        if plain_text != "":
+            matrix, key = self.encrypt_string(str(plain_text),self.rotation)
+            self.ui.KeyShow.setPlainText(str(key).strip())
+            self.ui.TableSize.setValue(self.check_size(plain_text))
+            self.print_matrix(matrix)
 
     def encrypt_string(self,input_string,rotation):
         #fill string
@@ -116,6 +124,9 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
 
         return cipher_matrix, key
 
+    ###############
+    # Decryption
+    ###############
     def check_decrypt(self):
         key_text = self.ui.KeyShow.toPlainText()
         key_text = unicode(key_text, "utf-8")
@@ -157,22 +168,9 @@ class TurningGrill(QtGui.QMainWindow, Ui_TurningGrill):
 
         return original_string[0:original_len]
 
-
+# RUN THE APPLICATION
 if __name__ == '__main__':              # if we're running file directly and not importing it
     app = QtGui.QApplication(sys.argv)  # A new instance of QApplication
     form = TurningGrill()  # We set the form to be our ExampleApp (design)
     form.show()  # Show the form
     app.exec_()  # and execute the app
-
-
-"""
-string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-rotation1 = "anticlockwise"
-rotation2 = "clockwise"
-
-matriz, key, length_original= programm.encrypt_string(string,rotation1)
-print length_original
-stringde = programm.decrypt_string(matriz, key, length_original, rotation1)
-
-"""
-
